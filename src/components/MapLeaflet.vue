@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import PartnerService, { type Partner } from '@/api/PartnerService'
-import LFreeDraw from 'vue2-leaflet-freedraw';
-import { NONE, ALL } from 'leaflet-freedraw';
 import { computed, onMounted, ref, type Ref, reactive, onBeforeMount } from 'vue'
 import 'leaflet/dist/leaflet.css'
 import SelectAddress from './SelectAddress.vue'

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: NotoSansJP;
+    src: url('@/fonts/NotoSansJP-Regular.ttf');
+}
+
+*{
+    font-family: 'NotoSansJP';
+    font-size: 16px;
+}

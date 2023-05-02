@@ -43,7 +43,7 @@ watch(selectedAddress, () => {
 </script>
 
 <template>
-  <div class="m-5">
+  <div class="p-10">
     <h1 class="text-3xl mb-10 text-yellow-400">What address are you looking for?</h1>
     <v-select  :placeholder="'Seach an address to show in map below'" :clearSearchOnBlur="clearSearchOnBlur" :loading="loading" :filterable="false" v-model="selectedAddress" :options="places" @search="onSearchAddress">
     </v-select>

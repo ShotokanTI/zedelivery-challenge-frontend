@@ -3,23 +3,14 @@ import axios from './config/config';
 import { TYPE, useToast } from "vue-toastification";
 import { notification } from "@/notifications/toast";
 
-interface CoverageArea {
-    type: String,
-    coordinates: MultiPolygon
-}
-
-interface Address {
-    type: string,
-    coordinates: Point
-}
 
 export interface Partner {
     id?: number,
-    tradingName: string|null,
-    ownerName: string|null,
-    document: string|null,
-    coverageArea: CoverageArea,
-    address: Address
+    tradingName: string,
+    ownerName: string,
+    document: string,
+    coverageArea: MultiPolygon,
+    address: Point
 }
 
 const toast = useToast()
@@ -47,6 +38,17 @@ class PartnerService {
     async savePartner(partner: any) {
         try {
             await axios.post("/partner", partner)
+            notification({ text: "Saved successfull", type: TYPE.SUCCESS })
+            return true
+        } catch (e: any) {
+            notification({ text: e.response.data.message, type: TYPE.ERROR })
+            return null;
+        }
+
+    }
+    async updatePartner(partner: any) {
+        try {
+            await axios.put("/partner", partner)
             notification({ text: "Saved successfull", type: TYPE.SUCCESS })
             return true
         } catch (e: any) {

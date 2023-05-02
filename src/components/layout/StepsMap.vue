@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <div class="w-full px-20 items-center h-64 flex mapinha relative"></div>
+    <div class="w-full px-20 items-center h-52 flex mapinha relative"></div>
     <div class="flex absolute top-16 items-center justify-evenly w-full">
       <h1 class="text-3xl font-extrabold text-yellow-400">
         FOLLOW <br />
@@ -23,7 +23,7 @@
 
 <style scoped>
 .mapinha {
-  background-image: url('@/assets/imgs/tutorialze.gif');
+  background-image: url('https://i.gifer.com/7N1e.gif');
   background-repeat: no-repeat;
   background-position: center;
   filter: blur(1px) opacity(1) saturate(1) brightness(0.3);

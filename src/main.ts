@@ -1,6 +1,11 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
+import "leaflet"
+import "leaflet-draw"
+import 'leaflet-draw/dist/leaflet.draw.css'
+import 'leaflet/dist/leaflet.css'
+
 import App from './App.vue'
 import router from './router'
 
@@ -36,8 +41,8 @@ app.use(router)
 
 app.use(Toast,options)
 
+app.component('L',L)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.component("v-select", vSelect)
-app.component('l-draw-toolbar', LDrawToolbar);
 
 app.mount('#app')

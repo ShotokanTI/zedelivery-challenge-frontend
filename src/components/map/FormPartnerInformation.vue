@@ -5,6 +5,8 @@ import {
   ref,
   type Ref,
   onMounted,
+  onBeforeUnmount,
+watch
 } from 'vue'
 import type { CoverageArea, Address, Partner } from '@/api/PartnerService'
 import PartnerService from '@/api/PartnerService'
@@ -16,6 +18,7 @@ const ownerNameRef: Ref<String> = ref('')
 const documentPartnerRef: Ref<String> = ref('')
 const CoverageArea: Ref<CoverageArea> = ref('')
 const Address: Ref<Address> = ref('')
+
 
 const props = defineProps<{
   idLayer: {
@@ -39,8 +42,20 @@ const props = defineProps<{
   }
   address: {
     type?: Address
+  },
+  triggerDrawDelete:{
+    type?: Number,
+    required:false
   }
 }>()
+
+
+watch(props.triggerDrawDelete,() => {
+  if(props.triggerDrawDelete){
+    service.deletePartner(props.id)
+  }
+})
+
 
 const partner = computed<Partner>(() => {
   const searchCurrentEditedLayerToUpdate = (item) => item.idParent == props.idLayer
@@ -80,6 +95,7 @@ async function updatePartner() {
     console.log(e)
   }
 }
+  
 </script>
 
 <template>

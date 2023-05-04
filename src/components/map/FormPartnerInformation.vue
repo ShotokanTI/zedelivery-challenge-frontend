@@ -43,18 +43,22 @@ const props = defineProps<{
   address: {
     type?: Address
   },
+  update:{
+    type?:Boolean,
+    default:false
+  },
   triggerDrawDelete:{
-    type?: Number,
+    type?: Number[],
     required:false
   }
 }>()
 
 
 watch(props.triggerDrawDelete,() => {
-  if(props.triggerDrawDelete){
+  if(props.triggerDrawDelete.value.includes(props.idLayer)){
     service.deletePartner(props.id)
   }
-})
+},{deep:true})
 
 
 const partner = computed<Partner>(() => {
@@ -77,20 +81,13 @@ onMounted(() => {
   Address.value = props.address
 })
 
-async function savePartner() {
+async function createOrUpdatePartner() {
   try {
-    if (props.id) {
-      const result = await service.updatePartner(partner.value)
+    if (props.update) {
+      await service.updatePartner(partner.value)
     } else {
-      const result = await service.savePartner(partner.value)
+      await service.savePartner(partner.value)
     }
-  } catch (e) {
-    console.log(e)
-  }
-}
-async function updatePartner() {
-  try {
-    const result = await service.updatePartner(partner.value)
   } catch (e) {
     console.log(e)
   }
@@ -106,6 +103,6 @@ async function updatePartner() {
     <input v-model="ownerNameRef" class="border-2" type="text" />
     <label class="mb-1" for="">Document</label>
     <input v-model="documentPartnerRef" class="border-2" type="text" />
-    <button @click="savePartner" type="button" class="bg-amber-300 rounded-lg mt-2">Save</button>
+    <button @click="createOrUpdatePartner" type="button" class="bg-amber-300 rounded-lg mt-2">{{ props.update ? 'Update' : 'Save'  }}</button>
   </div>
 </template>

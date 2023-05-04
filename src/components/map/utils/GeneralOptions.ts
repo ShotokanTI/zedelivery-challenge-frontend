@@ -6,11 +6,13 @@ export const options = {
       polyline:false,
       polygon: {
         drawError: {
-          color: '#e1e100', // Color the shape will turn when intersects
+          color: '#FACC14', // Color the shape will turn when intersects
           message: "<strong>Oh snap!<strong> you can't draw that!" // Message that will show when intersect
         },
+        fillColor:"#FACC14",
         shapeOptions: {
-          color: '#bada55'
+          backgroundColor: '#FACC14',
+          color: '#FACC14'
         }
       }, 
       rectangle: false,

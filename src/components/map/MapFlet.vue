@@ -16,8 +16,7 @@ import FormPartnerInformation from './FormPartnerInformation.vue'
 const drawQuantity = ref(0)
 const coverageAreaRef: any = ref([])
 const addressRef: any = ref([])
-const refsChildrenComponents: any = ref([])
-const currentLayerToDelete: any = ref(null)
+const currentLayerToDelete: any = ref([])
 
 
 const props = defineProps<{
@@ -28,30 +27,23 @@ const props = defineProps<{
 }>()
 
 function renderChildComponent(idParent: number) {
-  refsChildrenComponents.value.push({ ['ref' + idParent]: ref() })
-
   //render the child and set the props
   return h(FormPartnerInformation as any, {
     idLayer: idParent,
-    ref: 'ref' + idParent,
     ...toRefs({ coverageArea: coverageAreaRef, address: addressRef,triggerDrawDelete:currentLayerToDelete })
   })
 }
 
 function renderWhenApiHasData(
-  { id, tradingName, ownerName, document, idParent } = {
+  { id, tradingName, ownerName, document, idParent , update } = {
     id: Number,
     tradingName: String,
     ownerName: String,
     document: String,
-    idParent: Number
+    idParent: Number,
+    update:Boolean
   }
 ) {
-  refsChildrenComponents.value.push({ ['ref' + idParent]: ref(null) })
-
-  const re = refsChildrenComponents.value.find((item) =>
-    Object.keys(item).includes('ref' + idParent)
-  )
 
   //render the child and set the props
   return h(FormPartnerInformation as any, {
@@ -60,6 +52,7 @@ function renderWhenApiHasData(
     id: id,
     tradingName: tradingName,
     ownerName: ownerName,
+    update,
     documentPartner: document,
     ...toRefs({
       coverageArea: coverageAreaRef,
@@ -187,8 +180,14 @@ function initMap() {
 
   map.on('draw:deleted', (e: L.LeafletEvent) => {
     e.layers.eachLayer(function (layer: any) {
-      currentLayerToDelete.value  = layer.idParent
+      currentLayerToDelete.value.push(layer.idParent)
     })
+  })
+
+  map.on('tooltipopen',(e) => {
+    setTimeout(() => {
+      e.tooltip.close()
+    }, 5000);
   })
 
   watch(
@@ -207,6 +206,7 @@ function initMap() {
     () => {
       const GeoJson: any = props.allDemarcatedArea.map((item) => {
         const layer = L.geoJson(item)
+        layer.setStyle({fillColor:'#facc14',color:'white'})
         addNonGroupLayers(layer, featureGroup)
         return layer
       })
@@ -214,7 +214,13 @@ function initMap() {
       const allDemarcatedArea: any = Object.values(GeoJson[0]._layers)
 
       props.allMarkersPositions.forEach((marker, i) => {
-        const markerLocations: any = L.marker(marker.locations as LatLngTuple).addTo(map)
+
+        let Quiosque = L.icon({
+          iconUrl:"../../src/assets/icons/quisque.png",
+          iconSize: [35, 35],
+        })
+
+        const markerLocations: any = L.marker(marker.locations as LatLngTuple,{icon:Quiosque}).addTo(map)
         markerLocations.idParent = L.Util.stamp(allDemarcatedArea[i])
         featureGroup.addLayer(markerLocations)
       })
@@ -226,12 +232,27 @@ function initMap() {
         item.coverageArea.idParent = idParent
         item.address.idParent = idParent
         item.idParent = idParent
+        item.update = true
 
         coverageAreaRef.value.push(item.coverageArea)
         addressRef.value.push(item.address)
 
         const appcreated = createApp(renderWhenApiHasData(item))
-        allDemarcatedArea[i].bindTooltip('Click to open form to save partner informations.')
+        allDemarcatedArea[i].bindTooltip(`
+        <div class="flex flex-col gap-4 p-3">
+          <div class="flex">
+            <span class="font-bold text-yellow-400">Store </span>  
+            <span class="ml-2 italic">${item.tradingName}</span>
+          </div>
+          <div class="flex">
+            <span class="font-bold text-yellow-400">Owner</span>  
+            <span class="ml-2 italic">${item.tradingName}</span>
+          </div>
+          <div class="flex">
+            Click on <span class="mx-2 font-bold text-yellow-400">demarcated area</span> for update 
+            </div>
+        </div>
+        `)
 
         const element = document.createElement('div')
         element.id = 'element' + drawQuantity.value

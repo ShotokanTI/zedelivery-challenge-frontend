@@ -49,7 +49,7 @@ class PartnerService {
     async updatePartner(partner: any) {
         try {
             await axios.put("/partner", partner)
-            notification({ text: "Saved successfull", type: TYPE.SUCCESS })
+            notification({ text: "Updated successfull", type: TYPE.SUCCESS })
             return true
         } catch (e: any) {
             notification({ text: e.response.data.message, type: TYPE.ERROR })
@@ -61,7 +61,7 @@ class PartnerService {
     async deletePartner(id: number) {
         try {
             await axios.delete(`/partner/${id}`)
-            notification({ text: "Saved successfull", type: TYPE.SUCCESS })
+            notification({ text: "Deleted successfull", type: TYPE.SUCCESS })
             return true
         } catch (e: any) {
             notification({ text: e.response.data.message, type: TYPE.ERROR })

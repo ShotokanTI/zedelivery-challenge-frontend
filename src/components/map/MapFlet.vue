@@ -216,7 +216,7 @@ function initMap() {
       props.allMarkersPositions.forEach((marker, i) => {
 
         let Quiosque = L.icon({
-          iconUrl:"../../src/assets/icons/quisque.png",
+          iconUrl:"/assets/quisque.png",
           iconSize: [35, 35],
         })
 

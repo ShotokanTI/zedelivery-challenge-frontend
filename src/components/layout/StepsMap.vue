@@ -11,10 +11,10 @@
           <span class="font-bold text-2xl text-yellow-400">1</span> Search for the address that you want. 
         </li>
         <li class="text-lg text-white">
-          <span class="font-bold text-2xl text-yellow-400">2</span> Add markers that will show up on the map to indicate the partner's coverage area.
+          <span class="font-bold text-2xl text-yellow-400">2</span> Draw polygons to demarcate the coverage area and the partner's area.
         </li>
         <li class="text-lg text-white">
-          <span class="font-bold text-2xl text-yellow-400">3</span> Fill in the additional partner information and save.
+          <span class="font-bold text-2xl text-yellow-400">3</span> Click on the polygon, fill in additional partner information, and save it.
         </li>
       </ul>
     </div>
@@ -23,7 +23,7 @@
 
 <style scoped>
 .mapinha {
-  background-image: url('https://i.gifer.com/7N1e.gif');
+  background-image: url('https://raw.githubusercontent.com/ReyhaneMasumi/mapbox-gl-draw-cut-polygon-mode/HEAD/demo/public/demo.gif');
   background-repeat: no-repeat;
   background-position: center;
   filter: blur(1px) opacity(1) saturate(1) brightness(0.3);

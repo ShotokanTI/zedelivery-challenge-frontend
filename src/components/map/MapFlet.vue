@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import L, { LatLng, type LatLngTuple } from 'leaflet'
-import {
-  createApp,
-  h,
-  onMounted,
-  ref,
-  toRefs,
-  watch,
-} from 'vue'
+import { createApp, h, onMounted, ref, toRefs, watch } from 'vue'
 import type { LocationDetails } from '@/types/MapLeafletTypes'
 import type { FeatureCollection, Polygon } from 'geojson'
 import { options } from './utils/GeneralOptions'
@@ -18,7 +11,6 @@ const coverageAreaRef: any = ref([])
 const addressRef: any = ref([])
 const currentLayerToDelete: any = ref([])
 
-
 const props = defineProps<{
   allMarkersPositions: LocationDetails[]
   allDemarcatedArea: FeatureCollection<Polygon>[][]
@@ -26,25 +18,38 @@ const props = defineProps<{
   selectedAddress: LatLngTuple
 }>()
 
+const iconMarker = L.icon({
+  iconUrl: 'assets/marker-icon.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
+  shadowUrl:'assets/marker-shadow.png'
+})
+
 function renderChildComponent(idParent: number) {
   //render the child and set the props
   return h(FormPartnerInformation as any, {
     idLayer: idParent,
-    ...toRefs({ coverageArea: coverageAreaRef, address: addressRef,triggerDrawDelete:currentLayerToDelete })
+    ...toRefs({
+      coverageArea: coverageAreaRef,
+      address: addressRef,
+      triggerDrawDelete: currentLayerToDelete
+    })
   })
 }
 
 function renderWhenApiHasData(
-  { id, tradingName, ownerName, document, idParent , update } = {
+  { id, tradingName, ownerName, document, idParent, update } = {
     id: Number,
     tradingName: String,
     ownerName: String,
     document: String,
     idParent: Number,
-    update:Boolean
+    update: Boolean
   }
 ) {
-
   //render the child and set the props
   return h(FormPartnerInformation as any, {
     ref: 'ref' + idParent,
@@ -57,7 +62,7 @@ function renderWhenApiHasData(
     ...toRefs({
       coverageArea: coverageAreaRef,
       address: addressRef,
-      triggerDrawDelete:currentLayerToDelete
+      triggerDrawDelete: currentLayerToDelete
     })
   })
 }
@@ -128,7 +133,7 @@ function createDraws(layer: any, map: L.Map) {
 
   console.log(addressRef.value.at(-1))
 
-  let marker: any = L.marker(addressRef.value.at(-1).coordinates)
+  let marker: any = L.marker(addressRef.value.at(-1).coordinates,{icon:iconMarker})
 
   layer.idParent = idParent
   marker.idParent = idParent
@@ -184,17 +189,17 @@ function initMap() {
     })
   })
 
-  map.on('tooltipopen',(e) => {
+  map.on('tooltipopen', (e) => {
     setTimeout(() => {
       e.tooltip.close()
-    }, 5000);
+    }, 5000)
   })
 
   watch(
     () => props.selectedAddress,
     () => {
       map.setView(props.selectedAddress, 5)
-      const markerLayer = L.marker(props.selectedAddress).addTo(map)
+      const markerLayer = L.marker(props.selectedAddress,{icon:iconMarker}).addTo(map)
       map.on('zoom', () => {
         map.removeLayer(markerLayer)
       })
@@ -206,7 +211,7 @@ function initMap() {
     () => {
       const GeoJson: any = props.allDemarcatedArea.map((item) => {
         const layer = L.geoJson(item)
-        layer.setStyle({fillColor:'#facc14',color:'white'})
+        layer.setStyle({ fillColor: '#facc14', color: 'white' })
         addNonGroupLayers(layer, featureGroup)
         return layer
       })
@@ -214,13 +219,14 @@ function initMap() {
       const allDemarcatedArea: any = Object.values(GeoJson[0]._layers)
 
       props.allMarkersPositions.forEach((marker, i) => {
-
         let Quiosque = L.icon({
-          iconUrl:"/assets/quisque.png",
-          iconSize: [35, 35],
+          iconUrl: '/assets/quisque.png',
+          iconSize: [35, 35]
         })
 
-        const markerLocations: any = L.marker(marker.locations as LatLngTuple,{icon:Quiosque}).addTo(map)
+        const markerLocations: any = L.marker(marker.locations as LatLngTuple, {
+          icon: Quiosque
+        }).addTo(map)
         markerLocations.idParent = L.Util.stamp(allDemarcatedArea[i])
         featureGroup.addLayer(markerLocations)
       })
@@ -280,7 +286,6 @@ onMounted(() => {
   initMap()
   console.log()
 })
-
 </script>
 
 <template>
